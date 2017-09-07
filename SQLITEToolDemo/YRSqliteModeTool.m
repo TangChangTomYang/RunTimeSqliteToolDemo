@@ -160,7 +160,7 @@
     
 }
 
-/** 根据模型 查询满足条件的 所有的数据 ,结果是一个 字典的数据*/
+/** 根据模型 查询满足条件的 所有 模型  eg; whereStr = @"name = 'zhangsan'"*/
 +(NSMutableArray *)queryModeArray:(Class)cls whereStr:(NSString *)whereStr uid:(NSString *)uid{
     
     //1. 判断表格是否存在,不存在则创建表格
@@ -189,6 +189,15 @@
     return  [self parseResultArr:resultArr withClass:cls];
    
 }
+
+/** 查询数据库数据  name != value*/
++(NSMutableArray *)queryModeArray:(Class)cls  columnName:(NSString *)columnName  relationType:(SqliteRelationType)relationType value:(id)value  uid:(NSString *)uid{
+    NSString *relationStr = [self sqliteRelationDic][@(relationType)];
+    NSString *whereStr = [NSString stringWithFormat:@"%@ %@ '%@'",columnName,relationStr,value ];
+    return [self queryModeArray:cls whereStr:whereStr uid:uid];
+
+}
+
 
 
 
@@ -229,7 +238,7 @@
 }
 
 /** 保存 或者 更新 modeArray */
-+(BOOL)saveOrUpdateSameModes:(NSArray*)modeArray uid:(NSString *)uid{
++(BOOL)saveOrUpdateSameModeArray:(NSArray*)modeArray uid:(NSString *)uid{
     
     // 用户 可以使用这个方法直接保存 模型数据
     id mode = modeArray[0];
@@ -272,7 +281,7 @@
 }
 
 /** 保存 或者 更新 modeArray  array 内的对象可以是不同 类型  */
-+(BOOL)saveOrUpdateDifferentModes:(NSArray*)modeArray uid:(NSString *)uid{
++(BOOL)saveOrUpdateDifferentModeArray:(NSArray*)modeArray uid:(NSString *)uid{
     
     NSMutableArray *sqls = [NSMutableArray array];
     for (int  i = 0; i < modeArray.count; i++) {
@@ -773,7 +782,8 @@
               @(SqliteRelationType_more):@">",
               @(SqliteRelationType_less):@"<",
               @(SqliteRelationType_moreEqual):@">=",
-              @(SqliteRelationType_lessEqual):@"<="
+              @(SqliteRelationType_lessEqual):@"<=",
+              @(SqliteRelationType_notEqual):@"!=",
               };
 }
 

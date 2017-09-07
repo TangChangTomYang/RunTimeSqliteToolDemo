@@ -16,9 +16,17 @@ SqliteRelationType_equal, // 等于 =
     SqliteRelationType_more,//大于 >
     SqliteRelationType_less,//小于 <
     SqliteRelationType_moreEqual,//大于等于 >=
-    SqliteRelationType_lessEqual//小于等于 <=
+    SqliteRelationType_lessEqual,//小于等于 <=
+    SqliteRelationType_notEqual//不等于 !=
 
 }SqliteRelationType;
+
+typedef enum {
+    SqliteNOtAndOrType_Not,
+    SqliteNOtAndOrType_And,
+    SqliteNOtAndOrType_Or
+    
+}SqliteNOtAndOrType;
 
 
 //#warning 使用说明, 凡是涉及到的数据模型,在 保存 或者 更新时 所有的字段不能 为nil 必须有确定的值
@@ -46,6 +54,9 @@ SqliteRelationType_equal, // 等于 =
 /** 查询数据库数据  满足条件的模型数组*/
 +(NSMutableArray *)queryModeArray:(Class)cls  whereStr:(NSString *)whereStr  uid:(NSString *)uid;
 
+/** 查询数据库数据  name != value*/
++(NSMutableArray *)queryModeArray:(Class)cls  columnName:(NSString *)columnName  relationType:(SqliteRelationType)relationType value:(id)value  uid:(NSString *)uid;
+
 
 
 #pragma mark- 保存 或者 更新 类方法
@@ -53,10 +64,10 @@ SqliteRelationType_equal, // 等于 =
 +(BOOL)saveOrUpdateMode:(id)mode uid:(NSString *)uid;
 
 /** 保存 或者 更新 modeArray   array 内的对象必须是同一个类型  */
-+(BOOL)saveOrUpdateSameModes:(NSArray*)modeArray uid:(NSString *)uid;
++(BOOL)saveOrUpdateSameModeArray:(NSArray*)modeArray uid:(NSString *)uid;
 
 /** 保存 或者 更新 modeArray  array 内的对象可以是不同 类型  */
-+(BOOL)saveOrUpdateDifferentModes:(NSArray*)modeArray uid:(NSString *)uid;
++(BOOL)saveOrUpdateDifferentModeArray:(NSArray*)modeArray uid:(NSString *)uid;
 
 
 
